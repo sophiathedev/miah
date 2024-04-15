@@ -1,5 +1,26 @@
 import Bitwise
 
+defmodule Bitboard.String do
+  alias Bitboard.Utils
+
+  @spec to_string(non_neg_integer()) :: binary()
+  @doc "Function create a board for bitboard for easier in use"
+  def to_string(b) do
+    y_axis = "  A B C D E F G H"
+    board = "8 "
+    board <> to_char(b, 63) <> y_axis
+  end
+
+  # private function for process of bitboard to_string board generator
+  defp to_char(_b, index) when index == -1, do: "\n"
+  defp to_char(b, index) do
+    char = if band(b, Utils.bit_square(index)) != 0, do: "# ", else: ". "
+    seperator = if rem(index, 8) == 0 and index != 0, do: "\n#{div(index, 8)} ", else: ""
+    char <> seperator <> to_char(b, index - 1)
+  end
+
+end
+
 defmodule Bitboard.Utils do
   @compile { :inline,
     ls1b: 1,
@@ -28,6 +49,10 @@ defmodule Bitboard.Utils do
       _ -> 0
     end) &&& 0xffffffffffffffff # and operation with full board mask for guarantee that after shift the bit already on the board
   end
+
+  @doc "Shift to next bit"
+  @spec next_bit(non_neg_integer()) :: non_neg_integer()
+  def next_bit(b), do: b >>> 1
 
   # population count routine function
   # https://www.chessprogramming.org/Population_Count#The_PopCount_routine
@@ -92,5 +117,6 @@ defmodule Bitboard.Utils do
   @doc "Reverse the rank from original rank bitboard"
   @spec bit_not_rank(non_neg_integer()) :: non_neg_integer()
   def bit_not_rank(rank), do: band(bnot(bit_rank(rank)), 0xffffffffffffffff)
-
 end
+
+IO.puts(Bitboard.String.to_string(8182691913055559681))
