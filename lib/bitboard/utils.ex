@@ -11,8 +11,27 @@ defmodule Bitboard.Utils do
     bit_not_rank: 1,
   }
 
+  # very important shift function the necessary in every chess engine using bitboard technique
+  @spec shift(non_neg_integer(), any()) :: non_neg_integer()
+  def shift(b, direction) do
+    (case direction do
+      :north -> b <<< 8
+      :south -> b >>> 8
+      :north_north -> b <<< 16
+      :south_south -> b >>> 16
+      :east -> band(b, bit_not_file(:h)) <<< 1
+      :west -> band(b, bit_not_file(:a)) >>> 1
+      :north_east -> band(b, bit_not_file(:h)) <<< 9
+      :north_west -> band(b, bit_not_file(:a)) <<< 7
+      :south_east -> band(b, bit_not_file(:h)) >>> 7
+      :south_west -> band(b, bit_not_file(:a)) >>> 9
+      _ -> 0
+    end) &&& 0xffffffffffffffff # and operation with full board mask for guarantee that after shift the bit already on the board
+  end
+
   # population count routine function
   # https://www.chessprogramming.org/Population_Count#The_PopCount_routine
+  @doc "Population Count for count every 1-bit in a Integer"
   @spec popcount(integer()) :: byte()
   def popcount(x) do
     k1 = 0x5555555555555555
@@ -28,6 +47,7 @@ defmodule Bitboard.Utils do
   end # popcount/1
 
   # use debruijn64 for get least significant bit index
+  @doc "Get index of least significant bit in a Integer using Debruijn64 algorithm"
   @spec ls1b(integer()) :: any()
   def ls1b(x) when x != 0 do
     index64 = [ 0,  1, 48,  2, 57, 49, 28,  3, 61, 58, 50, 42, 38, 29, 17,  4, 62, 55, 59, 36, 53, 51, 43, 22, 45, 39, 33, 30, 24, 18, 12,  5, 63, 47, 56, 27, 60, 41, 37, 16, 54, 35, 52, 21, 44, 32, 23, 11, 46, 26, 40, 15, 34, 20, 31, 10, 25, 14, 19,  9, 13,  8,  7,  6 ]
@@ -37,14 +57,17 @@ defmodule Bitboard.Utils do
   end # ls1b/1
 
   # pop least significant bit using bitwise and operation with x - 1
+  @doc "Pop least significant bit"
   @spec pop_lsb(integer()) :: integer()
   def pop_lsb(x), do: band(x, x - 1) # pop_lsb/1
 
   # function for board operation
+  @doc "Get the square present in Bitboard"
   @spec bit_square(integer()) :: non_neg_integer()
   def bit_square(x), do: band(1 <<< x, 0xffffffffffffffff)
 
   # function for get the file as the bitboard presentation
+  @doc "Get the file of the board using Bitboard presentation"
   @spec bit_file(atom()) :: non_neg_integer()
   def bit_file(file) do
     # tricky get the ascii code using pattern matching of elixir
@@ -56,14 +79,17 @@ defmodule Bitboard.Utils do
   end
 
   # function for get the rank as the bitboard presentation
+  @doc "Get the rank of the board using Bitboard presentation"
   @spec bit_rank(non_neg_integer()) :: non_neg_integer()
   def bit_rank(rank), do: (0xff <<< (8 * rank))
 
   # reverse the file is not_file = ~file
+  @doc "Reverse the file from original file bitboard"
   @spec bit_not_file(atom()) :: non_neg_integer()
   def bit_not_file(file), do: band(bnot(bit_file(file)), 0xffffffffffffffff)
 
   # reverse the rank is not_rank = ~rank
+  @doc "Reverse the rank from original rank bitboard"
   @spec bit_not_rank(non_neg_integer()) :: non_neg_integer()
   def bit_not_rank(rank), do: band(bnot(bit_rank(rank)), 0xffffffffffffffff)
 
