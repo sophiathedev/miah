@@ -47,6 +47,7 @@ defmodule Bitboard.Utils do
   # function for get the file as the bitboard presentation
   @spec bit_file(atom()) :: non_neg_integer()
   def bit_file(file) do
+    # tricky get the ascii code using pattern matching of elixir
     char = file |> to_string()
     <<ascii::utf8>> = char
 
