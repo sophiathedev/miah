@@ -12,7 +12,7 @@ defmodule Bitboard.Utils do
   }
 
   # very important shift function the necessary in every chess engine using bitboard technique
-  @spec shift(non_neg_integer(), any()) :: non_neg_integer()
+  @spec shift(non_neg_integer(), atom()) :: non_neg_integer()
   def shift(b, direction) do
     (case direction do
       :north -> b <<< 8
