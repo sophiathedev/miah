@@ -1,6 +1,6 @@
-# Chess
+# Miah
 
-**TODO: Add description**
+Chess engine written on pure Elixir functional programming language
 
 ## Installation
 
