@@ -49,6 +49,8 @@ defmodule Bitboard.Utils do
     end) &&& 0xffffffffffffffff # and operation with full board mask for guarantee that after shift the bit already on the board
   end
 
+  @doc "This function perform all shift in shift function in one operation"
+  @spec all_shift(non_neg_integer()) :: non_neg_integer()
   def all_shift(x) do
     all_direction = [:north, :south, :east, :west, :north_west, :north_east, :south_east, :south_west]
     all_shift = all_direction |> Stream.map(fn(dir) -> shift(x, dir) end) |> Enum.reduce(0, &(bor(&1, &2)))
