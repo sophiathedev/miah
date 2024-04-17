@@ -26,6 +26,7 @@ defmodule Bitboard.Utils do
     popcount: 1,
     pop_lsb: 1,
     bit_square: 1,
+    next_bit: 1,
     # we doesnt use inline for bit file because it have string operation
     bit_rank: 1,
     bit_not_rank: 1,
