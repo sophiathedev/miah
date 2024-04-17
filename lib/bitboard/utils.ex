@@ -18,7 +18,6 @@ defmodule Bitboard.String do
     seperator = if rem(index, 8) == 0 and index != 0, do: "\n#{div(index, 8)} ", else: ""
     char <> seperator <> to_char(b, index - 1)
   end
-
 end
 
 defmodule Bitboard.Utils do
@@ -40,14 +39,20 @@ defmodule Bitboard.Utils do
       :south -> b >>> 8
       :north_north -> b <<< 16
       :south_south -> b >>> 16
-      :east -> band(b, bit_not_file(:h)) <<< 1
-      :west -> band(b, bit_not_file(:a)) >>> 1
-      :north_east -> band(b, bit_not_file(:h)) <<< 9
-      :north_west -> band(b, bit_not_file(:a)) <<< 7
-      :south_east -> band(b, bit_not_file(:h)) >>> 7
-      :south_west -> band(b, bit_not_file(:a)) >>> 9
+      :east -> band(b, bit_not_file(:h)) >>> 1
+      :west -> band(b, bit_not_file(:a)) <<< 1
+      :north_east -> band(b, bit_not_file(:h)) <<< 7
+      :north_west -> band(b, bit_not_file(:a)) <<< 9
+      :south_east -> band(b, bit_not_file(:h)) >>> 9
+      :south_west -> band(b, bit_not_file(:a)) >>> 7
       _ -> 0
     end) &&& 0xffffffffffffffff # and operation with full board mask for guarantee that after shift the bit already on the board
+  end
+
+  def all_shift(x) do
+    all_direction = [:north, :south, :east, :west, :north_west, :north_east, :south_east, :south_west]
+    all_shift = all_direction |> Stream.map(fn(dir) -> shift(x, dir) end) |> Enum.reduce(0, &(bor(&1, &2)))
+    all_shift
   end
 
   @doc "Shift to next bit"
@@ -118,5 +123,3 @@ defmodule Bitboard.Utils do
   @spec bit_not_rank(non_neg_integer()) :: non_neg_integer()
   def bit_not_rank(rank), do: band(bnot(bit_rank(rank)), 0xffffffffffffffff)
 end
-
-IO.puts(Bitboard.String.to_string(8182691913055559681))
