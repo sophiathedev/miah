@@ -1,6 +1,4 @@
-# Miah
-
-Chess engine written on pure Elixir functional programming language
+# Miah: Chess engine written on pure Elixir functional programming language
 
 ## Installation
 
