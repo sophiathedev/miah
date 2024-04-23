@@ -114,7 +114,7 @@ defmodule Bitboard.Utils do
   # function for get the rank as the bitboard presentation
   @doc "Get the rank of the board using Bitboard presentation"
   @spec bit_rank(non_neg_integer()) :: non_neg_integer()
-  def bit_rank(rank), do: (0xff <<< (8 * rank))
+  def bit_rank(rank), do: (0xff <<< (8 * (rank - 1)))
 
   # reverse the file is not_file = ~file
   @doc "Reverse the file from original file bitboard"
