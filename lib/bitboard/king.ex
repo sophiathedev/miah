@@ -2,6 +2,10 @@
 import Bitboard.Utils
 
 defmodule Bitboard.King do
+  @moduledoc """
+  This module is general set-wise for king, attacks, move and evaluation
+  """
+
   @doc "Initialize function for precalculate mask king attack"
   @spec initialize_king_attack() :: list(non_neg_integer())
   def initialize_king_attack do

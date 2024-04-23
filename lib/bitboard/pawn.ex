@@ -1,6 +1,10 @@
 import Bitwise
 
 defmodule Bitboard.Pawn do
+  @moduledoc """
+  This module is general set-wise for pawn mask, evaluation, attacks
+  """
+
   alias Bitboard.Utils
 
   @compile {:inline, single_push_target: 3, double_push_target: 3}

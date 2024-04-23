@@ -1,6 +1,10 @@
 import Bitwise
 
 defmodule Bitboard.String do
+  @moduledoc """
+  This module is general bitwise operation in bitboard
+  """
+
   alias Bitboard.Utils
 
   @spec to_string(non_neg_integer()) :: binary()
